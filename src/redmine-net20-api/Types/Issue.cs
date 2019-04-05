@@ -289,6 +289,18 @@ namespace Redmine.Net.Api.Types
         /// <summary>
         /// 
         /// </summary>
+        [XmlElement(RedmineKeys.COMPANY, IsNullable = true)]
+        public IdentifiableName Company { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [XmlElement(RedmineKeys.CONTACT, IsNullable = true)]
+        public IdentifiableName Contact { get; set; }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
         public XmlSchema GetSchema()
         {
@@ -441,6 +453,12 @@ namespace Redmine.Net.Api.Types
                         Watchers = reader.ReadElementContentAsCollection<Watcher>();
                         break;
 
+                    case RedmineKeys.COMPANY:
+                        Company = new IdentifiableName(reader);
+                        break;
+                    case RedmineKeys.CONTACT:
+                        Contact = new IdentifiableName(reader);
+                        break;
                     default:
                         reader.Read();
                         break;
@@ -486,6 +504,10 @@ namespace Redmine.Net.Api.Types
             writer.WriteArray(CustomFields, RedmineKeys.CUSTOM_FIELDS);
 
             writer.WriteListElements(Watchers as IList<IValue>, RedmineKeys.WATCHER_USER_IDS);
+
+            writer.WriteIdIfNotNull(Company, RedmineKeys.COMPANY);
+            writer.WriteIdIfNotNull(Contact, RedmineKeys.CONTACT);
+
         }
 
         /// <summary>
@@ -513,7 +535,9 @@ namespace Redmine.Net.Api.Types
                 Project = Project,
                 FixedVersion = FixedVersion,
                 Notes = Notes,
-                Watchers = Watchers.Clone()
+                Watchers = Watchers.Clone(),
+                Company = Company,
+                Contact = Contact
             };
             return issue;
         }
@@ -555,6 +579,8 @@ namespace Redmine.Net.Api.Types
             && (Children != null ?  Children.Equals<IssueChild>(other.Children) : other.Children == null)
             && (Journals != null ? Journals.Equals<Journal>(other.Journals) : other.Journals == null)
             && (Relations != null ? Relations.Equals<IssueRelation>(other.Relations) : other.Relations == null)
+            && (Company != null ? Company == other.Company : other.Company == null)
+            && (Contact != null ? Contact == other.Contact : other.Contact == null)
             );
         }
 
@@ -564,10 +590,10 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("[Issue: {30}, Project={0}, Tracker={1}, Status={2}, Priority={3}, Author={4}, Category={5}, Subject={6}, Description={7}, StartDate={8}, DueDate={9}, DoneRatio={10}, PrivateNotes={11}, EstimatedHours={12}, SpentHours={13}, CustomFields={14}, CreatedOn={15}, UpdatedOn={16}, ClosedOn={17}, Notes={18}, AssignedTo={19}, ParentIssue={20}, FixedVersion={21}, IsPrivate={22}, Journals={23}, Changesets={24}, Attachments={25}, Relations={26}, Children={27}, Uploads={28}, Watchers={29}]",
+            return string.Format("[Issue: {32}, Project={0}, Tracker={1}, Status={2}, Priority={3}, Author={4}, Category={5}, Subject={6}, Description={7}, StartDate={8}, DueDate={9}, DoneRatio={10}, PrivateNotes={11}, EstimatedHours={12}, SpentHours={13}, CustomFields={14}, CreatedOn={15}, UpdatedOn={16}, ClosedOn={17}, Notes={18}, AssignedTo={19}, ParentIssue={20}, FixedVersion={21}, IsPrivate={22}, Journals={23}, Changesets={24}, Attachments={25}, Relations={26}, Children={27}, Uploads={28}, Watchers={29}], Company={30}, Contact={31}",
                 Project, Tracker, Status, Priority, Author, Category, Subject, Description, StartDate, DueDate, DoneRatio, PrivateNotes,
                 EstimatedHours, SpentHours, CustomFields, CreatedOn, UpdatedOn, ClosedOn, Notes, AssignedTo, ParentIssue, FixedVersion,
-                IsPrivate, Journals, Changesets, Attachments, Relations, Children, Uploads, Watchers, base.ToString());
+                IsPrivate, Journals, Changesets, Attachments, Relations, Children, Uploads, Watchers, Company, Contact, base.ToString());
         }
 
         /// <summary>
@@ -613,6 +639,8 @@ namespace Redmine.Net.Api.Types
             hashCode = HashCodeHelper.GetHashCode(Uploads, hashCode);
             hashCode = HashCodeHelper.GetHashCode(Watchers, hashCode);
 
+            hashCode = HashCodeHelper.GetHashCode(Company, hashCode);
+            hashCode = HashCodeHelper.GetHashCode(Contact, hashCode);
             return hashCode;
         }
     }

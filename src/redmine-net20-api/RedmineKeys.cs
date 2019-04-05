@@ -658,5 +658,50 @@ namespace Redmine.Net.Api
 	    ///
 	    /// </summary>
 	    public const string REASSIGN_TO_ID = "reassign_to_id";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string COMPANY = "company";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string CONTACT = "contact";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string ADDRESS1 = "address1";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string ADDRESS2 = "address2";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string ZIP = "zip";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string TOWN = "town";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string STATE = "state";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string COUNTRY = "country";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string COUNTRY_CODE = "country_code";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string MAILS = "mails";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string PHONES = "phones";
     }
 }

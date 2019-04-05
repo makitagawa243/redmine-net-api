@@ -63,7 +63,8 @@ namespace Redmine.Net.Api
             {typeof(IssuePriority), "enumerations/issue_priorities"},
             {typeof(Watcher), "watchers"},
             {typeof(IssueCustomField), "custom_fields"},
-            {typeof(CustomField), "custom_fields"}
+            {typeof(CustomField), "custom_fields"},
+            {typeof(Company), "companies"},
         };
 
         private readonly string basicAuthorization;
