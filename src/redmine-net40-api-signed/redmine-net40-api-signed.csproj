@@ -227,6 +227,9 @@
     <Compile Include="..\redmine-net20-api\Types\Permission.cs">
       <Link>Types\Permission.cs</Link>
     </Compile>
+    <Compile Include="..\redmine-net20-api\Types\Phone.cs">
+      <Link>Types\Phone.cs</Link>
+    </Compile>
     <Compile Include="..\redmine-net20-api\Types\Project.cs">
       <Link>Types\Project.cs</Link>
     </Compile>

@@ -703,5 +703,13 @@ namespace Redmine.Net.Api
         /// 
         /// </summary>
         public const string PHONES = "phones";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string PHONE = "phone";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string KIND = "kind";
     }
 }

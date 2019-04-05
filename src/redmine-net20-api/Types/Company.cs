@@ -5,6 +5,8 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Internals;
+using System.IO;
+
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
@@ -67,14 +69,19 @@ namespace Redmine.Net.Api.Types
         [XmlArrayItem(RedmineKeys.MAIL)]
         public IList<string> Mails { get; set; }
 
-        // TODO not yet add. phones 
+        /// <summary>
+        /// 
+        /// </summary>
+        [XmlArray(RedmineKeys.PHONES)]
+        [XmlArrayItem(RedmineKeys.PHONE)]
+        public IList<Phone> Phones { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         [XmlArray(RedmineKeys.PROJECTS)]
         [XmlArrayItem(RedmineKeys.PROJECT)]
-        public IList<Project> Projects { get; set; }
+        public IList<IdentifiableName> Projects { get; set; }
 
 
         /// <summary>
@@ -159,8 +166,64 @@ namespace Redmine.Net.Api.Types
                     case RedmineKeys.MAILS:
                         Mails = reader.ReadElementContentAsCollection<string>();
                         break;
+                    case RedmineKeys.PHONES:
+                        {
+                            // TODO TBD Phone has "value" attribute. it seems to cause the error of deserialize. To avoid, Phone instance is generated in this method. should be found more smart way...
+                            Phones = new List<Phone>();
+                            var xml = reader.ReadOuterXml();
+                            using (var sr = new StringReader(xml))
+                            {
+                                var r = new XmlTextReader(sr);
+                                r.ReadStartElement();
+                                while (!r.EOF)
+                                {
+                                    if (r.NodeType == XmlNodeType.EndElement)
+                                    {
+                                        r.ReadEndElement();
+                                        continue;
+                                    }
+                                    Phone temp = null;
+
+                                    if (r.IsEmptyElement && r.HasAttributes)
+                                    {
+                                        temp = new Phone(r);
+                                    }
+
+                                    if (temp != null) Phones.Add(temp);
+                                    if (!r.IsEmptyElement) r.Read();
+                                }
+                            }
+                        }
+                        
+                        break;
                     case RedmineKeys.PROJECTS:
-                        Projects = reader.ReadElementContentAsCollection<Project>();
+                        {
+                            // TODO TBD projects are IdentifiableName's list, it seems to cause same problem as Phone. should be found more smart way...
+                            Projects = new List<IdentifiableName>();
+                            var xml = reader.ReadOuterXml();
+                            using (var sr = new StringReader(xml))
+                            {
+                                var r = new XmlTextReader(sr);
+                                r.ReadStartElement();
+                                while (!r.EOF)
+                                {
+                                    if (r.NodeType == XmlNodeType.EndElement)
+                                    {
+                                        r.ReadEndElement();
+                                        continue;
+                                    }
+                                    IdentifiableName temp = null;
+
+                                    if (r.IsEmptyElement && r.HasAttributes)
+                                    {
+                                        temp = new IdentifiableName(r);
+                                    }
+
+                                    if (temp != null) Projects.Add(temp);
+                                    if (!r.IsEmptyElement) r.Read();
+                                }
+                            }
+                        }
                         break;
 
                     case RedmineKeys.CREATED_ON:
@@ -200,7 +263,7 @@ namespace Redmine.Net.Api.Types
             writer.WriteElementString(RedmineKeys.COUNTRY_CODE, CountryCode);
             writer.WriteIdIfNotNull(Priority, RedmineKeys.PRIORITY_ID);
             writer.WriteArray(Mails, RedmineKeys.MAILS);
-            // TODO phones are missing now.
+            writer.WriteArray(Phones, RedmineKeys.PHONES);
             writer.WriteArray(Projects, RedmineKeys.PROJECTS);
             writer.WriteArray(CustomFields, RedmineKeys.CUSTOM_FIELDS);
         }
@@ -224,7 +287,7 @@ namespace Redmine.Net.Api.Types
                 CountryCode = CountryCode,
                 Priority = Priority,
                 Mails = Mails,
-                // TODO phones are missing now.
+                Phones = Phones,
                 Projects = Projects,
                 CustomFields = CustomFields
             };
@@ -251,8 +314,8 @@ namespace Redmine.Net.Api.Types
             && CountryCode == other.CountryCode
             && Priority == other.Priority
             && (Mails != null ? Mails.Equals<string>(other.Mails) : other.Mails == null)
-            // TODO phones are missing now.
-            && (Projects != null ? Projects.Equals<Project>(other.Projects) : other.Mails == null)
+            && (Phones != null ? Phones.Equals<Phone>(other.Phones) : other.Phones == null)
+            && (Projects != null ? Projects.Equals<IdentifiableName>(other.Projects) : other.Mails == null)
             && (CustomFields != null ? CustomFields.Equals<IssueCustomField>(other.CustomFields) : other.CustomFields == null)
             );
         }
@@ -263,8 +326,8 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("[Company: {14}, Name={0}, Addresss1={1}, Address2={2}, Zip={3}, Town={4}, State={5}, Country={6}, CountryCode={7}, Priority={8}, Mails={9}, Projects={10}, CustomFields={11}, CreatedOn={12}, UpdatedOn={13}",
-                Name, Address1, Address2, Zip, Town, State, Country, CountryCode, Priority, Mails, Projects,
+            return string.Format("[Company: {15}, Name={0}, Addresss1={1}, Address2={2}, Zip={3}, Town={4}, State={5}, Country={6}, CountryCode={7}, Priority={8}, Mails={9}, Phones={10} Projects={11}, CustomFields={12}, CreatedOn={13}, UpdatedOn={14}",
+                Name, Address1, Address2, Zip, Town, State, Country, CountryCode, Priority, Mails, Phones, Projects,
                 CustomFields, CreatedOn, UpdatedOn, base.ToString());
             // TODO phones are missing now.
         }
@@ -288,7 +351,7 @@ namespace Redmine.Net.Api.Types
             hashCode = HashCodeHelper.GetHashCode(CountryCode, hashCode);
             hashCode = HashCodeHelper.GetHashCode(Priority, hashCode);
             hashCode = HashCodeHelper.GetHashCode(Mails, hashCode);
-            // TODO phones are missing now.
+            hashCode = HashCodeHelper.GetHashCode(Phones, hashCode);
             hashCode = HashCodeHelper.GetHashCode(Projects, hashCode);
             hashCode = HashCodeHelper.GetHashCode(CustomFields, hashCode);
             return hashCode;

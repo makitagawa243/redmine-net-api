@@ -117,6 +117,7 @@
     <Compile Include="Types\MembershipRole.cs" />
     <Compile Include="Types\News.cs" />
     <Compile Include="Types\Permission.cs" />
+    <Compile Include="Types\Phone.cs" />
     <Compile Include="Types\Project.cs" />
     <Compile Include="Types\ProjectEnabledModule.cs" />
     <Compile Include="Types\ProjectIssueCategory.cs" />
