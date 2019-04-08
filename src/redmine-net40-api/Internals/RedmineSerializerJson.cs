@@ -72,7 +72,11 @@ namespace Redmine.Net.Api.Internals
             {typeof (CustomField), new CustomFieldConverter()},
             {typeof (CustomFieldRole), new CustomFieldRoleConverter()},
             {typeof (CustomFieldPossibleValue), new CustomFieldPossibleValueConverter()},
-            {typeof (File), new FileConverter() }
+            {typeof (File), new FileConverter() },
+            // TODO not implement yet.
+            //{typeof (Company), new CompanyConverter() },
+            //{typeof (Contact), new ContactConverter() },
+            //{typeof (Phone), new PhoneConverter() },
         };
 
         /// <summary>

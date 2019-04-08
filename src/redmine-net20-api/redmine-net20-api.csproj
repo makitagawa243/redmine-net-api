@@ -80,6 +80,7 @@
     <Compile Include="Logging\TraceLogger.cs" />
     <Compile Include="MimeFormat.cs" />
     <Compile Include="Types\Attachments.cs" />
+    <Compile Include="Types\Contact.cs" />
     <Compile Include="Types\Company.cs" />
     <Compile Include="Types\File.cs" />
     <Compile Include="Types\PaginatedObjects.cs" />

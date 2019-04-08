@@ -56,7 +56,12 @@ namespace Redmine.Net.Api.Types
             Multiple = reader.ReadAttributeAsBoolean(RedmineKeys.MULTIPLE);
             reader.Read();
 
-            if (string.IsNullOrEmpty(reader.GetAttribute("type")))
+            if(reader.NodeType == XmlNodeType.Text)
+            {
+                Values = new List<CustomFieldValue>();
+                Values.Add(new CustomFieldValue() { Info = reader.Value });
+            }
+            else if (string.IsNullOrEmpty(reader.GetAttribute("type")))
             {
                 Values = new List<CustomFieldValue> { new CustomFieldValue { Info = reader.ReadElementContentAsString() } };
             }

@@ -711,5 +711,9 @@ namespace Redmine.Net.Api
         /// 
         /// </summary>
         public const string KIND = "kind";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string GENDER = "gender";
     }
 }

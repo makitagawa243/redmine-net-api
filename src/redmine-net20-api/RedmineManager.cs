@@ -792,5 +792,18 @@ namespace Redmine.Net.Api
 
             return false;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="contactId"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public virtual Contact GetContact(int companyId, int contactId, NameValueCollection parameters)
+        {
+            var url = UrlHelper.GetContactUrl(this, companyId, contactId);
+            return WebApiHelper.ExecuteDownload<Contact>(this, url, "GetContact", parameters);
+        }
     }
 }

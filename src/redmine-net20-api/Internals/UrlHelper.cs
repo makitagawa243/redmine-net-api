@@ -62,6 +62,10 @@ namespace Redmine.Net.Api.Internals
         /// </summary>
         const string FILE_URL_FORMAT = "{0}/projects/{1}/files.{2}";
 
+        /// <summary>
+        /// 
+        /// </summary>
+        const string CONTACT_URL_FORMAT = "{0}/companies/{1}/contacts/{2}.{3}";
 
         /// <summary>
         /// </summary>
@@ -367,6 +371,19 @@ namespace Redmine.Net.Api.Internals
         public static string GetAttachmentUpdateUrl(RedmineManager redmineManager, int issueId)
         {
             return string.Format(ATTACHMENT_UPDATE_FORMAT, redmineManager.Host, issueId,
+                redmineManager.MimeFormat.ToString().ToLower());
+        }
+
+        /// <summary>
+        /// Gets the contact URL.
+        /// </summary>
+        /// <param name="redmineManager">The redmine manager.</param>
+        /// <param name="companyId">The company identifier.</param>
+        /// <param name="contactId">The contact identifier.</param>
+        /// <returns></returns>
+        public static string GetContactUrl(RedmineManager redmineManager, int companyId, int contactId)
+        {
+            return string.Format(CONTACT_URL_FORMAT, redmineManager.Host, companyId, contactId,
                 redmineManager.MimeFormat.ToString().ToLower());
         }
     }

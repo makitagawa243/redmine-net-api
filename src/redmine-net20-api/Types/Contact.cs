@@ -12,56 +12,41 @@ namespace Redmine.Net.Api.Types
     /// <summary>
     /// 
     /// </summary>
-    [XmlRoot(RedmineKeys.COMPANY)]
-    public class Company : Identifiable<Company>, IXmlSerializable, IEquatable<Company>, ICloneable
+    [XmlRoot(RedmineKeys.CONTACT)]
+    public class Contact : Identifiable<Contact>, IXmlSerializable, IEquatable<Contact>, ICloneable
     {
         /// <summary>
         /// 
         /// </summary>
         [XmlElement(RedmineKeys.NAME)]
         public string Name { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [XmlArray(RedmineKeys.PROJECTS)]
+        [XmlArrayItem(RedmineKeys.PROJECT)]
+        public IList<IdentifiableName> Projects { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.ADDRESS1)]
-        public string Address1 { get; set; }
+        [XmlElement(RedmineKeys.COMPANY)]
+        public IdentifiableName Company { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.ADDRESS2)]
-        public string Address2 { get; set; }
+        [XmlElement(RedmineKeys.FIRSTNAME)]
+        public string FirstName { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.ZIP)]
-        public string Zip { get; set; }
+        [XmlElement(RedmineKeys.LASTNAME)]
+        public string LastName { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.TOWN)]
-        public string Town { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        [XmlElement(RedmineKeys.STATE)]
-        public string State { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        [XmlElement(RedmineKeys.COUNTRY)]
-        public string Country { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        [XmlElement(RedmineKeys.COUNTRY_CODE)]
-        public string CountryCode { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        [XmlElement(RedmineKeys.ISSUE_PRIORITY)]
-        public IdentifiableName Priority { get; set; }
-
+        [XmlElement(RedmineKeys.GENDER)]
+        public bool Gender { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -75,15 +60,7 @@ namespace Redmine.Net.Api.Types
         [XmlArray(RedmineKeys.PHONES)]
         [XmlArrayItem(RedmineKeys.PHONE)]
         public IList<Phone> Phones { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [XmlArray(RedmineKeys.PROJECTS)]
-        [XmlArrayItem(RedmineKeys.PROJECT)]
-        public IList<IdentifiableName> Projects { get; set; }
-
-
+        
         /// <summary>
         /// Gets or sets the custom fields.
         /// </summary>
@@ -139,29 +116,14 @@ namespace Redmine.Net.Api.Types
                     case RedmineKeys.NAME:
                         Name = reader.ReadElementContentAsString();
                         break;
-                    case RedmineKeys.ADDRESS1:
-                        Address1 = reader.ReadElementContentAsString();
+                    case RedmineKeys.FIRSTNAME:
+                        FirstName = reader.ReadElementContentAsString();
                         break;
-                    case RedmineKeys.ADDRESS2:
-                        Address2 = reader.ReadElementContentAsString();
+                    case RedmineKeys.LASTNAME:
+                        LastName = reader.ReadElementContentAsString();
                         break;
-                    case RedmineKeys.ZIP:
-                        Zip = reader.ReadElementContentAsString();
-                        break;
-                    case RedmineKeys.TOWN:
-                        Town = reader.ReadElementContentAsString();
-                        break;
-                    case RedmineKeys.STATE:
-                        State = reader.ReadElementContentAsString();
-                        break;
-                    case RedmineKeys.COUNTRY:
-                        Country = reader.ReadElementContentAsString();
-                        break;
-                    case RedmineKeys.COUNTRY_CODE:
-                        CountryCode = reader.ReadElementContentAsString();
-                        break;
-                    case RedmineKeys.ISSUE_PRIORITY:
-                        Priority = new IdentifiableName(reader);
+                    case RedmineKeys.GENDER:
+                        Gender = reader.ReadElementContentAsBoolean();
                         break;
                     case RedmineKeys.MAILS:
                         {
@@ -170,7 +132,7 @@ namespace Redmine.Net.Api.Types
                             using (var sr = new StringReader(xml))
                             {
                                 var r = new XmlTextReader(sr);
-                                r.ReadToFollowing("mail");                               
+                                r.ReadToFollowing("mail");
                                 while (!r.EOF)
                                 {
                                     if (r.NodeType == XmlNodeType.EndElement)
@@ -199,7 +161,6 @@ namespace Redmine.Net.Api.Types
                             {
                                 var r = new XmlTextReader(sr);
                                 r.ReadStartElement();
-                                /// r.ReadToFollowing("phone");
                                 while (!r.EOF)
                                 {
                                     if (r.NodeType == XmlNodeType.EndElement)
@@ -207,15 +168,12 @@ namespace Redmine.Net.Api.Types
                                         r.ReadEndElement();
                                         continue;
                                     }
-                                    Phone temp = null;
-                                    {
-                                        temp = new Phone(r);
-                                    }
+                                    Phone temp = new Phone(r);
                                     if (temp != null) Phones.Add(temp);
                                 }
                             }
                         }
-                        
+
                         break;
                     case RedmineKeys.PROJECTS:
                         {
@@ -254,11 +212,11 @@ namespace Redmine.Net.Api.Types
                     case RedmineKeys.UPDATED_ON:
                         UpdatedOn = reader.ReadElementContentAsNullableDateTime();
                         break;
-                        
+
                     case RedmineKeys.CUSTOM_FIELDS:
                         CustomFields = reader.ReadElementContentAsCollection<IssueCustomField>();
                         break;
-                        
+
 
 
                     default:
@@ -275,14 +233,9 @@ namespace Redmine.Net.Api.Types
         public void WriteXml(XmlWriter writer)
         {
             writer.WriteElementString(RedmineKeys.NAME, Name);
-            writer.WriteElementString(RedmineKeys.ADDRESS1, Address1);
-            writer.WriteElementString(RedmineKeys.ADDRESS2, Address2);
-            writer.WriteElementString(RedmineKeys.ZIP, Zip);
-            writer.WriteElementString(RedmineKeys.TOWN, Town);
-            writer.WriteElementString(RedmineKeys.STATE, State);
-            writer.WriteElementString(RedmineKeys.COUNTRY, Country);
-            writer.WriteElementString(RedmineKeys.COUNTRY_CODE, CountryCode);
-            writer.WriteIdIfNotNull(Priority, RedmineKeys.PRIORITY_ID);
+            writer.WriteElementString(RedmineKeys.FIRSTNAME, FirstName);
+            writer.WriteElementString(RedmineKeys.LASTNAME, LastName);
+            writer.WriteElementString(RedmineKeys.GENDER, Gender.ToString());
             writer.WriteArray(Mails, RedmineKeys.MAILS);
             writer.WriteArray(Phones, RedmineKeys.PHONES);
             writer.WriteArray(Projects, RedmineKeys.PROJECTS);
@@ -295,18 +248,13 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public object Clone()
         {
-            var issue = new Company
+            var issue = new Contact
             {
                 Id = Id,
                 Name = Name,
-                Address1 = Address1,
-                Address2 = Address2,
-                Zip = Zip,
-                Town = Town,
-                State = State,
-                Country = Country,
-                CountryCode = CountryCode,
-                Priority = Priority,
+                FirstName = FirstName,
+                LastName = LastName,
+                Gender = Gender,
                 Mails = Mails,
                 Phones = Phones,
                 Projects = Projects,
@@ -320,20 +268,15 @@ namespace Redmine.Net.Api.Types
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(Company other)
+        public bool Equals(Contact other)
         {
             if (other == null) return false;
             return (
                 Id == other.Id
             && Name == other.Name
-            && Address1 == other.Address1
-            && Address2 == other.Address2
-            && Zip == other.Zip
-            && Town == other.Town
-            && State == other.State
-            && Country == other.Country
-            && CountryCode == other.CountryCode
-            && Priority == other.Priority
+            && FirstName == other.FirstName
+            && LastName == other.LastName
+            && Gender == other.Gender
             && (Mails != null ? Mails.Equals<string>(other.Mails) : other.Mails == null)
             && (Phones != null ? Phones.Equals<Phone>(other.Phones) : other.Phones == null)
             && (Projects != null ? Projects.Equals<IdentifiableName>(other.Projects) : other.Mails == null)
@@ -347,8 +290,8 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("[Company: {15}, Name={0}, Addresss1={1}, Address2={2}, Zip={3}, Town={4}, State={5}, Country={6}, CountryCode={7}, Priority={8}, Mails={9}, Phones={10} Projects={11}, CustomFields={12}, CreatedOn={13}, UpdatedOn={14}",
-                Name, Address1, Address2, Zip, Town, State, Country, CountryCode, Priority, Mails, Phones, Projects,
+            return string.Format("[Contact: {10}, Name={0}, FirstName={1}, LastName={2}, Gender={3}, Mails={4}, Phones={5} Projects={6}, CustomFields={7}, CreatedOn={8}, UpdatedOn={9}",
+                Name, FirstName, LastName, Gender, Mails, Phones, Projects,
                 CustomFields, CreatedOn, UpdatedOn, base.ToString());
         }
 
@@ -361,15 +304,9 @@ namespace Redmine.Net.Api.Types
             var hashCode = base.GetHashCode();
 
             hashCode = HashCodeHelper.GetHashCode(Name, hashCode);
-            hashCode = HashCodeHelper.GetHashCode(Address1, hashCode);
-            hashCode = HashCodeHelper.GetHashCode(Address2, hashCode);
-            hashCode = HashCodeHelper.GetHashCode(Zip, hashCode);
-            hashCode = HashCodeHelper.GetHashCode(Town, hashCode);
-            hashCode = HashCodeHelper.GetHashCode(State, hashCode);
-
-            hashCode = HashCodeHelper.GetHashCode(Country, hashCode);
-            hashCode = HashCodeHelper.GetHashCode(CountryCode, hashCode);
-            hashCode = HashCodeHelper.GetHashCode(Priority, hashCode);
+            hashCode = HashCodeHelper.GetHashCode(FirstName, hashCode);
+            hashCode = HashCodeHelper.GetHashCode(LastName, hashCode);
+            hashCode = HashCodeHelper.GetHashCode(Gender, hashCode);
             hashCode = HashCodeHelper.GetHashCode(Mails, hashCode);
             hashCode = HashCodeHelper.GetHashCode(Phones, hashCode);
             hashCode = HashCodeHelper.GetHashCode(Projects, hashCode);

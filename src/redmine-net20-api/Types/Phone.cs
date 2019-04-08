@@ -35,12 +35,26 @@ namespace Redmine.Net.Api.Types
         /// <summary>
         /// 
         /// </summary>
+        public Phone()
+        {
+
+        }
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="reader"></param>
         public Phone(XmlReader reader)
         {
-            Value = reader.GetAttribute(RedmineKeys.VALUE);
+            // value comes as attribute or value....
             Kind = reader.GetAttribute(RedmineKeys.KIND);
-            reader.Read();
+            if (reader.NodeType == XmlNodeType.Element)
+            {
+                Value = reader.ReadElementContentAsString();
+            }
+            else
+            {
+                Value = reader.Value;
+            }
         }
 
         /// <summary>
