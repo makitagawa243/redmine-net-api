@@ -49,11 +49,20 @@ namespace Redmine.Net.Api.Types
             Kind = reader.GetAttribute(RedmineKeys.KIND);
             if (reader.NodeType == XmlNodeType.Element)
             {
-                Value = reader.ReadElementContentAsString();
+                Value = reader.GetAttribute(RedmineKeys.VALUE);
+                if (Value == null || Value == "")
+                {
+                    Value = reader.ReadElementContentAsString();
+                }
+                else
+                {
+                    reader.Read();
+                }
             }
             else
             {
                 Value = reader.Value;
+                reader.Read();
             }
         }
 

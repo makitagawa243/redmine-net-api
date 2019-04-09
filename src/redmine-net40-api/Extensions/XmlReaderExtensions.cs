@@ -168,8 +168,7 @@ namespace Redmine.Net.Api.Extensions
 
                     T temp;
 
-                    // if (r.IsEmptyElement && r.HasAttributes)
-                    if(r.HasAttributes)
+                    if (r.IsEmptyElement && r.HasAttributes)
                     {
                         temp = serializer.Deserialize(r) as T;
                     }
