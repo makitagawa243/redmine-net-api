@@ -665,7 +665,15 @@ namespace Redmine.Net.Api
         /// <summary>
         /// 
         /// </summary>
+        public const string COMPANY_ID = "company_id";
+        /// <summary>
+        /// 
+        /// </summary>
         public const string CONTACT = "contact";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string CONTACT_ID = "contact_id";
 
         /// <summary>
         /// 

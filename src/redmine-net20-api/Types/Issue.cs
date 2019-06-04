@@ -505,8 +505,8 @@ namespace Redmine.Net.Api.Types
 
             writer.WriteListElements(Watchers as IList<IValue>, RedmineKeys.WATCHER_USER_IDS);
 
-            writer.WriteIdIfNotNull(Company, RedmineKeys.COMPANY);
-            writer.WriteIdIfNotNull(Contact, RedmineKeys.CONTACT);
+            writer.WriteIdIfNotNull(Company, RedmineKeys.COMPANY_ID);
+            writer.WriteIdIfNotNull(Contact, RedmineKeys.CONTACT_ID);
 
         }
 
